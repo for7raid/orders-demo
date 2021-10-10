@@ -1,30 +1,106 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <Menubar :model="menubarItems">
+    <template #end>
+      <i class="pi pi-video" />
+      <i class="pi pi-wifi" />
+      <i class="pi pi-volume-up" />
+      <span>Fri 13:07</span>
+      <i class="pi pi-search" />
+      <i class="pi pi-bars" />
+    </template>
+  </Menubar>
+
+  <div class="container">
+    <router-view />
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+
+<script lang="ts" setup>
+import { ref, provide } from "vue";
+import { OrderService } from '@/services/OrderService';
+import {UserProvider} from '@/providers/UserProvider';
+
+provide('OrderService', new OrderService());
+provide('UserProvider', new UserProvider());
+
+const menubarItems = ref([
+  {
+    label: "Демо заказы",
+    class: "menubar-root",
+  },
+  {
+    label: "Заказы",
+    items: [
+      {
+        label: "Новый заказ",
+        icon: "pi pi-fw pi-plus",
+      },
+      {
+        separator: true,
+      },
+      {
+        label: "Все заказы",
+        icon: "pi pi-fw pi-external-link",
+        to: "/",
+      },
+    ],
+  },
+  {
+    label: "О программе",
+    icon: "pi pi-fw pi-question",
+    to: "/about",
+  },
+]);
+</script>
+
+
+<style lang="scss">
+@import './styles/statuses.scss';
+body {
+  margin: 0;
+  padding: 0;
 }
 
-#nav {
-  padding: 30px;
+.container {
+  position: absolute;
+  top: 58px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+.p-menubar {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 0;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+  .menubar-root {
+    font-weight: bold;
+    padding: 0 1rem;
+  }
+
+  .p-menuitem-link {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+    padding: 0.5rem 0.75rem;
+
+    > .p-submenu-icon {
+      display: none;
+    }
+  }
+
+  .p-menubar-end {
+    span,
+    i {
+      padding: 0 0.75rem;
+    }
+  }
+
+  .p-submenu-list {
+    z-index: 2;
+  }
 }
 </style>

@@ -1,0 +1,111 @@
+
+@page {
+    size: A4 landscape;
+}
+
+body {
+    font-family: "Times New Roman", Times, serif, Arial;
+    font-size: 14px;
+}
+
+input[type='text'], textarea {
+    resize: vertical;
+    font-family: "Times New Roman", Times, serif, Arial;
+    font-size: 14px;
+    width: 23cm;
+}
+
+input[type='text'] {
+    resize: none;
+    vertical-align: top;
+}
+
+.header {
+    width: 29cm;
+}
+
+footer {
+    width: 100%;
+}
+
+
+pre {
+    background-color: transparent;
+    border: none;
+}
+
+
+.textCenter {
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px auto;
+}
+
+.Total {
+    font-weight: 500;
+}
+
+.StatusColumn {
+    word-break: break-all;
+    min-width: 2cm;
+    max-width: 3cm;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+Table {
+    width: 100%;
+    /*border: 3px;
+    border-color: black;*/
+}
+
+hr.pagebreakhere {
+    border: dashed black;
+    border-width: 1px 0 0 0;
+    height: 0;
+    line-height: 0px;
+    font-size: 0;
+    margin-left: 5px;
+    padding: 0;
+    width: 100%;
+}
+
+p.pagebreakhere {
+    page-break-before: always;
+}
+
+td.detaiedItem {
+    font-weight: bold;
+    font-size: large;
+}
+
+td.detaiedItemHeader {
+    width: 5cm;
+    align: left;
+}
+
+img.preview {
+    max-height: 16cm;
+    max-width: 19cm;
+    margin: 10px;
+    align: midle;
+}
+
+button {
+    background-color: #d3dce0;
+    border: 1px solid #787878;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 7px;
+    margin-right: 8px;
+    width: auto;
+    float: right;
+}
+

@@ -1,0 +1,54 @@
+.order-stauts-badge {
+    border-radius: 2px;
+    min-width: 20px;
+    height: 20px;
+    margin: 0px 1px;
+    font-weight: 600;
+    padding: 0px 4px;
+}
+/*принят*/
+.order-stauts-badge.order-status-10 {
+    background: Orange;
+    color: white;
+}
+/*Внесены изменения*/
+.order-stauts-badge.order-status-20 {
+    background: Purple;
+    color: white;
+}
+/*Ошибочный заказ*/
+.order-stauts-badge.order-status-30 {
+    background: Red;
+    color: black;
+}
+/*Печатается*/
+.order-stauts-badge.order-status-40 {
+    background: Blue;
+    color: white;
+}
+/*На обработке*/
+.order-stauts-badge.order-status-50 {
+    background: Magenta;
+    color: white;
+}
+
+/*Готов*/
+.order-stauts-badge.order-status-60 {
+    background: Yellow;
+    color: black;
+}
+/*Отгружен*/
+.order-stauts-badge.order-status-70,
+    /*Отменен*/
+    .order-stauts-badge.order-status-80,
+    /*Доставлен*/
+    .order-stauts-badge.order-status-100 {
+    background: Green;
+    color: white;
+}
+
+/*обсчёт*/
+.order-stauts-badge.order-status-65 {
+    background: Gray;
+    color: white;
+}
