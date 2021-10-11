@@ -1,9 +1,35 @@
 <template>
   <div>
-    <UVOrderWaybill
-      :order="order"
-      v-if="order && order.constructor == UVOrder"
-    />
+    <div class="font-bold" v-if="order">
+      Итоговая* стоимость заказа: {{ formatDecimal(order.total) }} рублей
+      <div class="text-sm">* Не включает отмененные макеты</div>
+    </div>
+
+    <div class="flex overflow-hidden">
+      <Button
+        label="Сохранить"
+        icon="pi pi-save"
+        @click="save"
+        class="m-1 flex-none flex"
+      />
+
+      <Button
+        label="Выгрузить в Excel"
+        icon="pi pi-book"
+        class="m-1 p-button-success flex-none flex"
+        title="Выгрузить в Excel"
+        @@click="exportXlsx()"
+      />
+
+      <div class="flex-grow-1 flex"></div>
+
+      <Button
+        label="Закрыть"
+        icon="pi pi-undo"
+        @click="close"
+        class="m-1 flex-none flex"
+      />
+    </div>
   </div>
 </template>
 
@@ -16,6 +42,7 @@ import { UVOrder } from "@/entities/uv/UVOrder";
 import { useRoute } from "vue-router";
 import { OrderService } from "@/services/OrderService";
 import { UserProvider } from "@/providers/UserProvider";
+import { formatDecimal } from "@/utils/format";
 
 export default defineComponent({
   components: { UVOrderWaybill },
@@ -33,9 +60,17 @@ export default defineComponent({
         order.value = await orderService.find(id);
       }
     });
+
+    const save = async () => {};
+    const close = () => {};
+
     return {
       order,
       UVOrder,
+      save,
+      close,
+
+      formatDecimal: formatDecimal,
     };
   },
 });
