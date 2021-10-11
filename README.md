@@ -1,5 +1,18 @@
 # orders-demo
 
+## Демо приложение "Учет заказов производства рекламной продукции"
+
+```
+Приложение в разработке, плановый срок - 17.10.21
+```
+
+
+### Стек
+- TypeScript
+- Vue 3
+- Firebase
+
+
 ## Project setup
 ```
 npm install
@@ -19,11 +32,3 @@ npm run build
 ```
 npm run test:unit
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
