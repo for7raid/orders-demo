@@ -184,6 +184,8 @@
 <script lang="ts">
 import { OrderBase } from "@/entities/OrderBase";
 import { OrderService } from "@/services/OrderService";
+import { XlsxService } from '@/services/XlsxService';
+
 import { nextTick, defineComponent, inject, ref } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import { UVOrderObjectItemStatus } from "@/entities/uv/UVOrderObjectItemStatus";
@@ -195,6 +197,7 @@ import { useRouter } from "vue-router";
 export default defineComponent({
   name: "OrdersTable",
   setup(props, { emit }) {
+    const xlsx = new XlsxService();
     const orderService = inject("OrderService") as OrderService;
     const orders = ref<OrderBase[]>([]);
     const selectedOrder = ref<OrderBase | undefined>();
@@ -329,7 +332,9 @@ export default defineComponent({
     const printOrder = (id: number) => {
       window.open("/#/print/" + id, "_blank");
     };
-    const exportOrder = async (order: OrderBase) => {};
+    const exportOrder = async (order: OrderBase) => {
+      xlsx.export(order);
+    };
     return {
       orders,
       selectedOrder,

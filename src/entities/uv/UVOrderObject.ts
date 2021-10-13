@@ -1,4 +1,5 @@
-﻿import { Expose, Type } from "class-transformer";
+﻿import { createId } from "@/utils/uuid";
+import { Expose, plainToClass, Type } from "class-transformer";
 import { User } from "../User";
 import { UVOrderObjectItem } from "./UVOrderObjectItem";
 
@@ -20,7 +21,7 @@ export class UVOrderObject {
 	}
 
 	get totalSquare() {
-		return this.items.reduce((acc, cur) => { return acc + (cur.isCanceled ? 0 : cur.square *  cur.count); }, 0);
+		return this.items.reduce((acc, cur) => { return acc + (cur.isCanceled ? 0 : cur.square * cur.count); }, 0);
 	}
 
 	constructor(id: string, index: number) {
@@ -30,6 +31,23 @@ export class UVOrderObject {
 
 	cancel(user: User) {
 		this.items.forEach(item => item.cancel(user));
+	}
+
+	removeItem(item: UVOrderObjectItem) {
+		const index = this.items.indexOf(item);
+		if (index > -1) {
+			this.items.splice(index, 1);
+		}
+	}
+
+	createItem(user: User, item: UVOrderObjectItem) {
+		const allIndexes = this.items.map(o => o.index);
+		const max = Math.max(0, ...allIndexes) + 1;
+		const newRow = plainToClass(UVOrderObjectItem, { ...item }, { excludePrefixes: ['id', 'status', 'history'] });
+		newRow.id = createId();
+		newRow.index = max;
+		newRow.added(user)
+		return this.items.push(newRow);
 	}
 
 	validate() {

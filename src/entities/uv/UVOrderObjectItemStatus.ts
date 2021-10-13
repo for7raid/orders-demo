@@ -1,4 +1,6 @@
-﻿const UVOrderObjectItemStatus = {
+﻿const UVOrderObjectItemStatus: {
+	[index: number]: string;
+} = {
 	10: 'Принят',
 	20: 'Внесены изменения',
 	30: 'Ошибочный заказ',

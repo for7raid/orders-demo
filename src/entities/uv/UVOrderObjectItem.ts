@@ -4,6 +4,9 @@ import { Exclude, Expose } from 'class-transformer';
 import { UVOrderObject } from './UVOrderObject';
 
 export class UVOrderObjectItem {
+	static Materials = ['ПВХ 1 мм', 'ПВХ 3 мм', 'ПВХ 5 мм', 'Картон', 'Картон+пленка', 'ПЭТ 0,5 мм', 'ПЭТ 0,7мм', 'ПЭТ 1 мм', 'Баннер', 'Пленка с ламинацией'];
+	static Sides = ['4+0', '4+4'];
+	
 	id;
 	index = 1;
 

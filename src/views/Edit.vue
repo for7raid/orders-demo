@@ -1,5 +1,7 @@
 <template>
   <div>
+    <UVOrderEdit v-if="order && order.constructor == UVOrder" :order="order" />
+
     <div class="font-bold" v-if="order">
       Итоговая* стоимость заказа: {{ formatDecimal(order.total) }} рублей
       <div class="text-sm">* Не включает отмененные макеты</div>
@@ -30,28 +32,46 @@
         class="m-1 flex-none flex"
       />
     </div>
+    <ConfirmDialog></ConfirmDialog>
+    <Toast position="center">
+      <template #message="slotProps">
+        <div class="p-d-flex p-flex-column">
+          <div class="p-text-center">
+            <h4>{{ slotProps.message.summary }}</h4>
+            <p v-html="slotProps.message.detail"></p>
+          </div>
+        </div>
+      </template>
+    </Toast>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, onMounted } from "vue";
-import UVOrderWaybill from "@/components/uv/Waybill.vue";
+import { defineComponent, ref, inject, onMounted, watch } from "vue";
 
 import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { OrderService } from "@/services/OrderService";
 import { UserProvider } from "@/providers/UserProvider";
 import { formatDecimal } from "@/utils/format";
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
+import UVOrderEdit from "@/components/uv/Edit.vue";
 
 export default defineComponent({
-  components: { UVOrderWaybill },
+  components: { UVOrderEdit },
   setup() {
+    const router = useRouter();
+    const confirm = useConfirm();
+    const toast = useToast();
+
     const orderService = inject("OrderService") as OrderService;
     const userProvider = inject("UserProvider") as UserProvider;
     const route = useRoute();
     const id = route.params.id as string;
-    const order = ref<OrderBase | undefined>();
+    const order = ref<OrderBase>();
+    const hasChanges = ref(false);
 
     onMounted(async () => {
       if (id == "new") {
@@ -59,10 +79,45 @@ export default defineComponent({
       } else {
         order.value = await orderService.find(id);
       }
+
+      const unwatch = watch(
+        () => order.value,
+        () => {
+          hasChanges.value = true;
+          unwatch();
+        },
+        { deep: true }
+      );
     });
 
-    const save = async () => {};
-    const close = () => {};
+    const save = async () => {
+      const state = order.value!.validate();
+
+      if (!state.isValid) {
+        toast.add({
+          severity: "error",
+          summary: "В заказе есть ошибки",
+          detail: state.message,
+        });
+        return;
+      }
+      await orderService.save(order.value!);
+       router.push("/");
+    };
+    const close = () => {
+      if (hasChanges.value) {
+        confirm.require({
+          message: `В заказе есть изменения. Вы действительно закрыть заказ без сохранения'?`,
+          header: "Выход",
+          icon: "pi pi-exclamation-triangle",
+          accept: async () => {
+            router.push("/");
+          },
+        });
+      } else {
+        router.push("/");
+      }
+    };
 
     return {
       order,

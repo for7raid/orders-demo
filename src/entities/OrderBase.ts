@@ -22,4 +22,8 @@ export class OrderBase {
         this.id = this.date = this.changeDate = (new Date()).getTime();
         this.user = user;
     }
+
+    validate(): { isValid: boolean, message: string } {
+        throw new Error("not implemented");
+    }
 }

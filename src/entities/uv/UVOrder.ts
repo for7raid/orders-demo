@@ -1,4 +1,5 @@
-﻿import { Expose, Type } from 'class-transformer';
+﻿import { createId } from '@/utils/uuid';
+import { Expose, Type } from 'class-transformer';
 import { OrderBase } from '../OrderBase';
 import { UVOrderObject } from './UVOrderObject';
 
@@ -50,8 +51,15 @@ export class UVOrder extends OrderBase {
 		return total;
 	}
 
-	get canProcess(){
+	get canProcess() {
 		return this.status != 65;
+	}
+
+	createObject() {
+		const allIndexes = this.objects.map(o => o.index);
+		const max = Math.max(0, ...allIndexes) + 1;
+		const newObj = new UVOrderObject(createId(), max);
+		return this.objects.push(newObj);
 	}
 
 	validate() {
