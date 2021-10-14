@@ -5,20 +5,26 @@
       :order="order"
       v-if="order && order.constructor == UVOrder"
     />
+      <PrintOrderWaybill
+      :order="order"
+      v-if="order && order.constructor == PrintOrder"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted } from "vue";
 import UVOrderWaybill from "@/components/uv/Waybill.vue";
+import PrintOrderWaybill from "@/components/print/Waybill.vue";
 
 import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
+import { PrintOrder } from "@/entities/print/PrintOrder";
 import { useRoute } from "vue-router";
 import { OrderService } from "@/services/OrderService";
 
 export default defineComponent({
-  components: { UVOrderWaybill },
+  components: { UVOrderWaybill, PrintOrderWaybill },
   setup() {
     const orderService = inject("OrderService") as OrderService;
     const route = useRoute();
@@ -31,6 +37,7 @@ export default defineComponent({
     return {
       order,
       UVOrder,
+      PrintOrder
     };
   },
 });

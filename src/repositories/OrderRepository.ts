@@ -1,4 +1,5 @@
 import { OrderBase } from "@/entities/OrderBase";
+import { PrintOrder } from "@/entities/print/PrintOrder";
 import { UVOrder } from "@/entities/uv/UVOrder";
 import { plainToClass, classToPlain } from "class-transformer";
 
@@ -11,7 +12,11 @@ const orderConverter = {
     },
     fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions) => {
         const data = snapshot.data(options);
-        return plainToClass(UVOrder, data) as any;
+        const typeName = data.__type;
+        const type = typeName == 'UVOrder' ? UVOrder :
+            typeName == 'PrintOrder' ? PrintOrder :
+                OrderBase;
+        return plainToClass(type, data) as any;
     }
 };
 
@@ -37,10 +42,10 @@ export class OrderRepository {
     }
 
     async getAll(): Promise<OrderBase[]> {
-        const q = query(this.ordersCollection, orderBy("statuses", "desc"), orderBy("id", "desc"), limit(500)).withConverter(orderConverter);
+        const q = query(this.ordersCollection, orderBy("statuses"), orderBy("id", "desc"), limit(500)).withConverter(orderConverter);
         const querySnapshot = await getDocs(q);
-        
-        return querySnapshot.docs.map(d=>d.data()) as OrderBase[];
+
+        return querySnapshot.docs.map(d => d.data()) as OrderBase[];
     }
 
     async find(id: string): Promise<OrderBase | undefined> {

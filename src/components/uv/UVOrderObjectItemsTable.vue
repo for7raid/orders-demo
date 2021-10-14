@@ -620,35 +620,6 @@ export default defineComponent({
   color: black;
 }
 
-.p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
-.p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
-.p-datatable .p-datatable-tbody > tr > td .p-row-editor-save,
-.p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel,
-.p-button.p-button-icon-only.p-button-rounded {
-  height: 20px;
-}
-
-.p-button.p-button-icon-only {
-  padding: 0;
-}
-
-.p-datatable.p-datatable-sm {
-  font-size: 12px;
-}
-
-.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td,
-.p-datatable.p-datatable-sm .p-datatable-thead > tr > td,
-.p-datatable.p-datatable-sm .p-datatable-tfoot > tr > td,
-.p-datatable .p-datatable-tbody > tr > td,
-.p-datatable .p-datatable-thead > tr > th,
-.p-datatable .p-datatable-tfoot > tr > th {
-  padding: 0.1rem 0.1rem;
-}
-
-.p-datatable.p-datatable-sm .p-datatable-thead > tr > th,
-.p-datatable.p-datatable-sm .p-datatable-tfoot > tr > th {
-  padding: 2px 0px;
-}
 
 .items-table {
   overflow-x: scroll;

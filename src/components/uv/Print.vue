@@ -78,11 +78,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { formatDateTime, formatDecimal } from "@/utils/format";
-import { OrderBase } from "@/entities/OrderBase";
+import { UVOrder } from "@/entities/uv/UVOrder";
 
 export default defineComponent({
   props: {
-    order: OrderBase,
+    order: UVOrder,
   },
   setup() {
     return {

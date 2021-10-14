@@ -56,7 +56,9 @@ const menubarItems = ref([
 
 
 <style lang="scss">
-@import './styles/statuses.scss';
+
+
+
 body {
   margin: 0;
   padding: 0;

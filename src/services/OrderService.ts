@@ -1,4 +1,6 @@
 import { OrderBase } from "@/entities/OrderBase";
+import { PrintOrder } from "@/entities/print/PrintOrder";
+import { PrintOrderItem } from "@/entities/print/PrintOrderItem";
 import { UVOrder } from "@/entities/uv/UVOrder";
 import { UVOrderObjectItem } from "@/entities/uv/UVOrderObjectItem";
 import { UserProvider } from "@/providers/UserProvider";
@@ -31,6 +33,13 @@ export class OrderService {
                 })
             })
         }
+        if (order instanceof PrintOrder) {
+            order.items.forEach(item => {
+                if (item.canStart) {
+                    item.start(this.userProvider.currentUser);
+                }
+            })
+        }
         await this.save(order);
     }
 
@@ -44,6 +53,13 @@ export class OrderService {
                 })
             })
         }
+        if (order instanceof PrintOrder) {
+            order.items.forEach(item => {
+                if (item.canDispatch) {
+                    item.dispatch(this.userProvider.currentUser);
+                }
+            })
+        }
         await this.save(order);
     }
 
@@ -55,11 +71,19 @@ export class OrderService {
                 })
             })
         }
+        if (order instanceof PrintOrder) {
+            order.items.forEach(item => {
+                item.cancel(this.userProvider.currentUser);
+            })
+        }
         await this.save(order);
     }
 
     async startItem(order: OrderBase, item: any) {
         if (item instanceof UVOrderObjectItem) {
+            item.start(this.userProvider.currentUser);
+        }
+        if (item instanceof PrintOrderItem) {
             item.start(this.userProvider.currentUser);
         }
         await this.save(order);
@@ -69,11 +93,17 @@ export class OrderService {
         if (item instanceof UVOrderObjectItem) {
             item.finish(this.userProvider.currentUser);
         }
+        if (item instanceof PrintOrderItem) {
+            item.finish(this.userProvider.currentUser);
+        }
         await this.save(order);
     }
 
     async dispatchItem(order: OrderBase, item: any) {
         if (item instanceof UVOrderObjectItem) {
+            item.dispatch(this.userProvider.currentUser);
+        }
+        if (item instanceof PrintOrderItem) {
             item.dispatch(this.userProvider.currentUser);
         }
         await this.save(order);
@@ -83,11 +113,17 @@ export class OrderService {
         if (item instanceof UVOrderObjectItem) {
             item.mistake(this.userProvider.currentUser);
         }
+        if (item instanceof PrintOrderItem) {
+            item.mistake(this.userProvider.currentUser);
+        }
         await this.save(order);
     }
 
     async cancelItem(order: OrderBase, item: any) {
         if (item instanceof UVOrderObjectItem) {
+            item.cancel(this.userProvider.currentUser);
+        }
+        if (item instanceof PrintOrderItem) {
             item.cancel(this.userProvider.currentUser);
         }
         await this.save(order);

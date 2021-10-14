@@ -2,25 +2,28 @@
   <div class="home-contnainer">
      <button onclick="window.print(); return false;">Печать</button>
     <UVOrderPrint :order="order" v-if="order && order.constructor == UVOrder" />
+    <PrintOrderPrint :order="order" v-if="order && order.constructor == PrintOrder" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted } from "vue";
 import UVOrderPrint from "@/components/uv/Print.vue";
+import PrintOrderPrint from "@/components/print/Print.vue";
 
 import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
+import { PrintOrder } from "@/entities/print/PrintOrder";
 import { useRoute } from "vue-router";
 import { OrderService } from "@/services/OrderService";
 
 export default defineComponent({
-  components: { UVOrderPrint },
+  components: { UVOrderPrint, PrintOrderPrint},
   setup() {
     const orderService = inject("OrderService") as OrderService;
     const route = useRoute();
     const id = route.params.id as string;
-    const order = ref<OrderBase | undefined>();
+    const order = ref<OrderBase>();
 
     onMounted(async () => {
       order.value = await orderService.find(id);
@@ -32,6 +35,7 @@ export default defineComponent({
     return {
       order,
       UVOrder,
+      PrintOrder
     };
   },
 });

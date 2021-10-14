@@ -1,6 +1,7 @@
 <template>
   <div>
     <UVOrderEdit v-if="order && order.constructor == UVOrder" :order="order" />
+    <PrintOrderEdit v-if="order && order.constructor == PrintOrder" :order="order" />
 
     <div class="font-bold" v-if="order">
       Итоговая* стоимость заказа: {{ formatDecimal(order.total) }} рублей
@@ -51,6 +52,7 @@ import { defineComponent, ref, inject, onMounted, watch } from "vue";
 
 import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
+import { PrintOrder } from "@/entities/print/PrintOrder";
 import { useRoute, useRouter } from "vue-router";
 import { OrderService } from "@/services/OrderService";
 import { UserProvider } from "@/providers/UserProvider";
@@ -58,9 +60,10 @@ import { formatDecimal } from "@/utils/format";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import UVOrderEdit from "@/components/uv/Edit.vue";
+import PrintOrderEdit from "@/components/print/Edit.vue";
 
 export default defineComponent({
-  components: { UVOrderEdit },
+  components: { UVOrderEdit , PrintOrderEdit },
   setup() {
     const router = useRouter();
     const confirm = useConfirm();
@@ -122,6 +125,7 @@ export default defineComponent({
     return {
       order,
       UVOrder,
+      PrintOrder,
       save,
       close,
 

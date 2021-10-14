@@ -3,12 +3,68 @@ import XLSX from 'xlsx';
 import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
 import { UVOrderObject } from "@/entities/uv/UVOrderObject";
+import { PrintOrder } from '@/entities/print/PrintOrder';
 
 export class XlsxService {
     export(order: OrderBase, ...params: any[]) {
         if (order instanceof UVOrder) {
-            this.exportUV(order as UVOrder, params[0] as UVOrderObject)
+            return this.exportUV(order, params[0] as UVOrderObject)
         }
+
+        if (order instanceof PrintOrder) {
+            return this.exportPrint(order)
+        }
+
+        throw new Error("Not implemented!");
+
+    }
+
+    exportPrint(order: PrintOrder) {
+        const wb = XLSX.utils.book_new();
+
+        const ws_data: (any)[][] = [
+            ['№' + order.id, order.name],
+            [
+                "Макет",
+                "Сюжет",
+                "Кол-во",
+                "Материал",
+                "Ширина, м.",
+                "Высота, м.",
+                "Упаковка",
+                "Цена",
+                "Стоимость",
+                "Примечание"
+            ]];
+
+        for (let item of order.items) {
+            ws_data.push([
+                item.name,
+                item.content,
+                item.count,
+                item.materialType + "," + item.materialSubType,
+                item.width,
+                item.height,
+                item.wrapping,
+                item.price,
+                item.total,
+                item.description
+            ]);
+        }
+
+        const total = [];
+        total[0] = "Итого";
+        total[8] = order.total;
+        ws_data.push(total);
+
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+        const fileName = order.name + '.xlsx';
+
+        XLSX.writeFile(wb, fileName);
+
     }
 
     private exportUV(order: UVOrder, objectToExport: UVOrderObject) {

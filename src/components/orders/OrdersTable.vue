@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div style="height: 100%">
     <DataTable
       :value="orders"
       row-dblclick="editOrder($event.data.id)"
@@ -184,7 +184,7 @@
 <script lang="ts">
 import { OrderBase } from "@/entities/OrderBase";
 import { OrderService } from "@/services/OrderService";
-import { XlsxService } from '@/services/XlsxService';
+import { XlsxService } from "@/services/XlsxService";
 
 import { nextTick, defineComponent, inject, ref } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
@@ -193,6 +193,7 @@ import { UVOrder } from "@/entities/uv/UVOrder";
 import Menu from "primevue/menu";
 import { useConfirm } from "primevue/useconfirm";
 import { useRouter } from "vue-router";
+import { PrintOrder } from "@/entities/print/PrintOrder";
 
 export default defineComponent({
   name: "OrdersTable",
@@ -263,7 +264,7 @@ export default defineComponent({
     const getIsMenuItemDisabled = () => {
       const order = selectedOrder.value;
       if (!order) return true;
-      if (!(order instanceof UVOrder)) return true;
+      if (order instanceof PrintOrder) return false;
       return !(order as UVOrder).canProcess;
     };
     const startOrder = async () => {

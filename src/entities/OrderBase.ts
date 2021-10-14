@@ -1,6 +1,13 @@
+import { Exclude, Expose } from "class-transformer";
 import { User } from "./User";
 
 export class OrderBase {
+    @Expose({ toPlainOnly: true })
+    @Exclude({ toClassOnly: true })
+    get __type() {
+        return this.constructor.name;
+    }
+
     id: number;
     user: User;
     date: number;

@@ -4,15 +4,17 @@
       <OrdersTable v-model="selectedOrder" />
     </div>
     <div class="home-contnainer-row-2">
-      <!-- <Component
-        v-if="selectedOrder"
+      <UVOrderDetailsTable
+        v-if="selectedOrder && selectedOrder.constructor == UVOrder"
         v-model="selectedOrder"
-        :is="getDetailsComponent"
+        :order="selectedOrder"
+      /> 
+      
+      <PrintOrderDetailsTable
+        v-if="selectedOrder && selectedOrder.constructor == PrintOrder"
+        v-model="selectedOrder"
+        :order="selectedOrder"
       />
-       -->
-       <UVOrderDetailsTable  v-if="selectedOrder && selectedOrder.constructor == UVOrder"
-       v-model="selectedOrder"
-        :order="selectedOrder"/>
     </div>
   </div>
 </template>
@@ -21,23 +23,24 @@
 import { defineComponent, ref, inject } from "vue";
 import OrdersTable from "@/components/orders/OrdersTable.vue";
 import UVOrderDetailsTable from "@/components/orders/UVOrderDetailsTable.vue";
+import PrintOrderDetailsTable from "@/components/orders/PrintOrderDetailsTable.vue";
 import { OrderBase } from "@/entities/OrderBase";
-import { UVOrder} from '@/entities/uv/UVOrder';
+import {PrintOrder } from '@/entities/print/PrintOrder';
+import { UVOrder } from "@/entities/uv/UVOrder";
 
 export default defineComponent({
   components: {
     OrdersTable,
+
     UVOrderDetailsTable,
+    PrintOrderDetailsTable,
   },
   setup() {
     const selectedOrder = ref<OrderBase | null>(null);
-    const getDetailsComponent = () => {
-      return 'UVOrderDetailsTable';
-    };
     return {
       selectedOrder,
-      getDetailsComponent,
-      UVOrder
+      UVOrder,
+      PrintOrder,
     };
   },
 });
