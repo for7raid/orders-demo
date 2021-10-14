@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h3 v-if="order.id">Заказ №{{ order.id }}</h3>
+    <h3 v-if="order.id">Заказ на УФ печать №{{ order.id }}</h3>
 
     <div class="field grid">
       <label for="isCalculating" class="col-12 mb-2 md:col-2 md:mb-0"

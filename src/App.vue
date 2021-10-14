@@ -18,11 +18,11 @@
 
 <script lang="ts" setup>
 import { ref, provide } from "vue";
-import { OrderService } from '@/services/OrderService';
-import {UserProvider} from '@/providers/UserProvider';
+import { OrderService } from "@/services/OrderService";
+import { UserProvider } from "@/providers/UserProvider";
 
-provide('OrderService', new OrderService());
-provide('UserProvider', new UserProvider());
+provide("OrderService", new OrderService());
+provide("UserProvider", new UserProvider());
 
 const menubarItems = ref([
   {
@@ -35,6 +35,18 @@ const menubarItems = ref([
       {
         label: "Новый заказ",
         icon: "pi pi-fw pi-plus",
+        items: [
+          {
+            label: "УФ Печать",
+            icon: "pi pi-fw pi-plus",
+            to: "/edit/new?type=uv",
+          },
+          {
+            label: "Широкформатная Печать",
+            icon: "pi pi-fw pi-plus",
+            to: "/edit/new?type=print",
+          },
+        ],
       },
       {
         separator: true,
@@ -56,9 +68,6 @@ const menubarItems = ref([
 
 
 <style lang="scss">
-
-
-
 body {
   margin: 0;
   padding: 0;
@@ -66,7 +75,7 @@ body {
 
 .container {
   position: absolute;
-  top: 58px;
+  top: 35px;
   bottom: 0px;
   left: 0px;
   right: 0px;
@@ -102,7 +111,7 @@ body {
   }
 
   .p-submenu-list {
-    z-index: 2;
+    z-index: 100;
   }
 }
 </style>

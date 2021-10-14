@@ -1,7 +1,10 @@
 <template>
   <div>
     <UVOrderEdit v-if="order && order.constructor == UVOrder" :order="order" />
-    <PrintOrderEdit v-if="order && order.constructor == PrintOrder" :order="order" />
+    <PrintOrderEdit
+      v-if="order && order.constructor == PrintOrder"
+      :order="order"
+    />
 
     <div class="font-bold" v-if="order">
       Итоговая* стоимость заказа: {{ formatDecimal(order.total) }} рублей
@@ -63,7 +66,7 @@ import UVOrderEdit from "@/components/uv/Edit.vue";
 import PrintOrderEdit from "@/components/print/Edit.vue";
 
 export default defineComponent({
-  components: { UVOrderEdit , PrintOrderEdit },
+  components: { UVOrderEdit, PrintOrderEdit },
   setup() {
     const router = useRouter();
     const confirm = useConfirm();
@@ -78,7 +81,12 @@ export default defineComponent({
 
     onMounted(async () => {
       if (id == "new") {
-        order.value = new UVOrder(userProvider.currentUser);
+        const type = route.query.type;
+        if (type == "uv") {
+          order.value = new UVOrder(userProvider.currentUser);
+        } else if (type == "print") {
+          order.value = new PrintOrder(userProvider.currentUser);
+        }
       } else {
         order.value = await orderService.find(id);
       }
@@ -105,7 +113,7 @@ export default defineComponent({
         return;
       }
       await orderService.save(order.value!);
-       router.push("/");
+      router.push("/");
     };
     const close = () => {
       if (hasChanges.value) {

@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <DataTable
       :value="orders"
-      row-dblclick="editOrder($event.data.id)"
+      @row-dblclick="editOrder($event.data.id)"
       dataKey="id"
       class="p-datatable-sm"
       responsiveLayout="scroll"
@@ -148,10 +148,16 @@
         <span class="flex">
           <span class="text-lg text-900 align-self-center">Все заказы</span>
           <Button
-            label="Новый заказ"
+            label="Новый УФ заказ"
             icon="pi pi-plus"
             class="ml-2 align-self-center"
-            @click="editOrder('new')"
+            @click="newOrder('uv')"
+          />
+           <Button
+            label="Новый ШФ заказ"
+            icon="pi pi-plus"
+            class="ml-2 align-self-center"
+            @click="newOrder('print')"
           />
         </span>
       </template>
@@ -329,6 +335,10 @@ export default defineComponent({
     const editOrder = (id: number) => {
       router.push("/edit/" + id);
     };
+    
+    const newOrder = (type: string) => {
+      router.push("/edit/new?type=" + type);
+    };
 
     const printOrder = (id: number) => {
       window.open("/#/print/" + id, "_blank");
@@ -350,6 +360,7 @@ export default defineComponent({
       rowSelect,
       showMenu,
       editOrder,
+      newOrder,
       printOrder,
       waybillOrder,
       exportOrder,

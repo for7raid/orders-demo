@@ -1,13 +1,6 @@
 import "reflect-metadata";
 
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
 
-import fireapp from '@/firebase'
-
-//костыль, иначе модуль не подключается
-fireapp.fireapp.name;
 
 import PrimeVue from "primevue/config";
 import AutoComplete from 'primevue/autocomplete';
@@ -111,6 +104,14 @@ import 'primeflex/primeflex.css';
 import '@/styles/statuses.scss';
 import '@/styles/tablesm.css';
 
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+import fireapp from '@/firebase'
+
+//костыль, иначе модуль не подключается
+fireapp.fireapp.name;
 
 const app = createApp(App);
 
