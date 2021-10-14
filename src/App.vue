@@ -1,12 +1,10 @@
 <template>
   <Menubar :model="menubarItems">
+    <template #start>
+    <span class="menubar-root">Демо заказы</span>
+    </template>
     <template #end>
-      <i class="pi pi-video" />
-      <i class="pi pi-wifi" />
-      <i class="pi pi-volume-up" />
-      <span>Fri 13:07</span>
-      <i class="pi pi-search" />
-      <i class="pi pi-bars" />
+      <CurrentUser />
     </template>
   </Menubar>
 
@@ -16,54 +14,66 @@
 </template>
 
 
-<script lang="ts" setup>
-import { ref, provide } from "vue";
+<script lang="ts">
+import { defineComponent, ref, provide } from "vue";
 import { OrderService } from "@/services/OrderService";
 import { UserProvider } from "@/providers/UserProvider";
+import CurrentUser from "@/components/CurrentUser.vue";
 
-provide("OrderService", new OrderService());
-provide("UserProvider", new UserProvider());
+export default defineComponent({
+  components: { CurrentUser },
+  setup() {
+    provide("OrderService", new OrderService());
+    provide("UserProvider", new UserProvider());
 
-const menubarItems = ref([
-  {
-    label: "Демо заказы",
-    class: "menubar-root",
-  },
-  {
-    label: "Заказы",
-    items: [
+    const menubarItems = ref([
+      // {
+      //   label: "Демо заказы",
+      //   class: "menubar-root",
+      // },
       {
-        label: "Новый заказ",
-        icon: "pi pi-fw pi-plus",
+        label: "Заказы",
         items: [
           {
-            label: "УФ Печать",
+            label: "Новый заказ",
             icon: "pi pi-fw pi-plus",
-            to: "/edit/new?type=uv",
+            items: [
+              {
+                label: "УФ Печать",
+                icon: "pi pi-fw pi-plus",
+                to: "/edit/new?type=uv",
+              },
+              {
+                label: "Широкформатная Печать",
+                icon: "pi pi-fw pi-plus",
+                to: "/edit/new?type=print",
+              },
+            ],
           },
           {
-            label: "Широкформатная Печать",
-            icon: "pi pi-fw pi-plus",
-            to: "/edit/new?type=print",
+            separator: true,
+          },
+          {
+            label: "Все заказы",
+            icon: "pi pi-fw pi-external-link",
+            to: "/",
           },
         ],
       },
       {
-        separator: true,
+        label: "О программе",
+        icon: "pi pi-fw pi-question",
+        to: "/about",
       },
-      {
-        label: "Все заказы",
-        icon: "pi pi-fw pi-external-link",
-        to: "/",
-      },
-    ],
+    ]);
+
+
+return {
+  menubarItems
+}
+
   },
-  {
-    label: "О программе",
-    icon: "pi pi-fw pi-question",
-    to: "/about",
-  },
-]);
+});
 </script>
 
 

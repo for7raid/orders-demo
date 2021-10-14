@@ -1,8 +1,9 @@
 import { User } from "@/entities/User";
 
-import { getAuth, onAuthStateChanged as onAuthStateChangedF } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, onAuthStateChanged as onAuthStateChangedF, signInWithPopup } from "firebase/auth";
 
 export class UserService {
+
     get currentUser(): User {
         const current = getAuth().currentUser;
         if (current) {
@@ -11,5 +12,23 @@ export class UserService {
         return new User('Anonymous', 'Anonymous');
     }
 
+    onAuthStateChanged(callback: (user: User) => void) {
+        getAuth().onAuthStateChanged(user => {
+            if (user) {
+                callback(new User(user!.uid, user!.displayName || user!.email || 'Anonymous'));
+            }
+            else {
+                callback(new User('Anonymous', 'Anonymous'));
+            }
+        })
+    }
+
+    async signOut() {
+        await getAuth().signOut();
+    }
+
+    async signIn() {
+        signInWithPopup(getAuth(), new GoogleAuthProvider());
+    }
 
 }
