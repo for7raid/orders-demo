@@ -15,10 +15,10 @@ export class UserService {
     onAuthStateChanged(callback: (user: User) => void) {
         getAuth().onAuthStateChanged(user => {
             if (user) {
-                callback(new User(user!.uid, user!.displayName || user!.email || 'Anonymous'));
+                callback(new User(user!.uid, user!.displayName || user!.email || 'Anonymous', user.isAnonymous));
             }
             else {
-                callback(new User('Anonymous', 'Anonymous'));
+                callback(new User('Anonymous', 'Anonymous', true));
             }
         })
     }

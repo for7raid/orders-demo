@@ -1,7 +1,7 @@
 <template>
-  <span>{{ user.name }}</span>
-
-
+  <a class="p-menuitem-link" @click="onClick">{{ user.name }}
+    <span v-if="!user || user.isAnonymous">Войти</span>
+  </a>
 </template>
 
 <script lang="ts">
@@ -20,27 +20,17 @@ export default defineComponent({
 
     const signIn = userService.signIn;
     const signOut = userService.signOut;
-
-    const menubarItems = [
-      {
-        label: user.value.name,
-        class: "menubar-root",
-        items: [
-          {
-            label: "Выйти",
-            command: signOut,
-          },
-          {
-            label: "Войти",
-            command: signIn,
-          },
-        ],
-      },
-    ];
-
+    const onClick = async () => {
+      if (!user.value || user.value.isAnonymous) {
+        await signIn();
+      } else {
+        await signOut();
+      }
+    };
+   
     return {
       user,
-      menubarItems,
+      onClick,
     };
   },
 });

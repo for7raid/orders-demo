@@ -6,8 +6,8 @@ export class UserProvider {
     get currentUser(): User {
         const current = getAuth().currentUser;
         if (current) {
-            return new User(current!.uid, current!.displayName || current!.email || 'Anonymous');
+            return new User(current!.uid, current!.displayName || current!.email || 'Anonymous', current.isAnonymous);
         }
-        return new User('Anonymous','Anonymous');
+        return new User('Anonymous','Anonymous', true);
     }
 }

@@ -104,14 +104,11 @@ import 'primeflex/primeflex.css';
 import '@/styles/statuses.scss';
 import '@/styles/tablesm.css';
 
+import '@/firebase'
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-
-import fireapp from '@/firebase'
-
-//костыль, иначе модуль не подключается
-fireapp.fireapp.name;
 
 const app = createApp(App);
 

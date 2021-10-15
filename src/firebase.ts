@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,7 +23,8 @@ console.log('fire app init')
 const auth = getAuth();
 auth.onAuthStateChanged(user => {
   if (!user) {
-    signInWithPopup(auth, new GoogleAuthProvider());
+    //signInWithPopup(auth, new GoogleAuthProvider());
+    signInAnonymously(auth);
   }
 })
 
