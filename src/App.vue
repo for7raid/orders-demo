@@ -1,7 +1,7 @@
 <template>
   <Menubar :model="menubarItems">
     <template #start>
-    <span class="menubar-root">Демо заказы</span>
+      <span class="menubar-root">Демо заказы</span>
     </template>
     <template #end>
       <CurrentUser />
@@ -15,22 +15,13 @@
 
 
 <script lang="ts">
-import { defineComponent, ref, provide } from "vue";
-import { OrderService } from "@/services/OrderService";
-import { UserProvider } from "@/providers/UserProvider";
+import { defineComponent, ref } from "vue";
 import CurrentUser from "@/components/CurrentUser.vue";
 
 export default defineComponent({
   components: { CurrentUser },
   setup() {
-    provide("OrderService", new OrderService());
-    provide("UserProvider", new UserProvider());
-
     const menubarItems = ref([
-      // {
-      //   label: "Демо заказы",
-      //   class: "menubar-root",
-      // },
       {
         label: "Заказы",
         items: [
@@ -67,11 +58,9 @@ export default defineComponent({
       },
     ]);
 
-
-return {
-  menubarItems
-}
-
+    return {
+      menubarItems,
+    };
   },
 });
 </script>

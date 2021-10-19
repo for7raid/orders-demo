@@ -109,8 +109,24 @@ import '@/firebase'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { OrderService } from "./services/OrderService";
+import { OrderRepository } from "./repositories/OrderRepository";
+import { UserProvider } from "./providers/UserProvider";
+import { FakeOrderRepository } from "./repositories/FakeOrderRepository";
+
+const orderRepo = new OrderRepository();
+//const orderRepo = new FakeOrderRepository();
+const userProvider = new UserProvider();
+const orderService = new OrderService(orderRepo, userProvider);
 
 const app = createApp(App);
+
+app.mixin({
+    provide: {
+        UserProvider: userProvider,
+        OrderService: orderService
+    }
+});
 
 app.use(PrimeVue, { ripple: false });
 app.use(ConfirmationService);

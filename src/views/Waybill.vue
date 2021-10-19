@@ -21,12 +21,12 @@ import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
 import { PrintOrder } from "@/entities/print/PrintOrder";
 import { useRoute } from "vue-router";
-import { OrderService } from "@/services/OrderService";
+import { IOrderService } from "@/services/IOrderService";
 
 export default defineComponent({
   components: { UVOrderWaybill, PrintOrderWaybill },
   setup() {
-    const orderService = inject("OrderService") as OrderService;
+    const orderService = inject("OrderService") as IOrderService;
     const route = useRoute();
     const id = route.params.id as string;
     const order = ref<OrderBase | undefined>();

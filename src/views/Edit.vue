@@ -57,7 +57,7 @@ import { OrderBase } from "@/entities/OrderBase";
 import { UVOrder } from "@/entities/uv/UVOrder";
 import { PrintOrder } from "@/entities/print/PrintOrder";
 import { useRoute, useRouter } from "vue-router";
-import { OrderService } from "@/services/OrderService";
+import { IOrderService } from "@/services/IOrderService";
 import { UserProvider } from "@/providers/UserProvider";
 import { formatDecimal } from "@/utils/format";
 import { useConfirm } from "primevue/useconfirm";
@@ -72,7 +72,7 @@ export default defineComponent({
     const confirm = useConfirm();
     const toast = useToast();
 
-    const orderService = inject("OrderService") as OrderService;
+    const orderService = inject("OrderService") as IOrderService;
     const userProvider = inject("UserProvider") as UserProvider;
     const route = useRoute();
     const id = route.params.id as string;

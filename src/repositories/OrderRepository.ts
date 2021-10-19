@@ -4,7 +4,7 @@ import { UVOrder } from "@/entities/uv/UVOrder";
 import { plainToClass, classToPlain } from "class-transformer";
 
 import { getFirestore, collection, doc, getDoc, getDocs, setDoc, DocumentData, CollectionReference, query, limit, orderBy, SnapshotOptions, QueryDocumentSnapshot } from "firebase/firestore"
-import { FakeOrderRepository } from "./FakeOrderRepository";
+import { IOrderRepository } from "./IOrderRepository";
 
 const orderConverter = {
     toFirestore: (order: OrderBase): any => {
@@ -21,7 +21,7 @@ const orderConverter = {
 };
 
 
-export class OrderRepository {
+export class OrderRepository implements IOrderRepository {
     static CollectionName = 'Orders';
     // static IDCounterCollectionName = 'Counters';
 
@@ -33,12 +33,7 @@ export class OrderRepository {
         this.ordersCollection = collection(this.db, OrderRepository.CollectionName).withConverter(orderConverter);
         // this.counterCollection = collection(this.db, OrderRepository.IDCounterCollectionName);
 
-        // const fake = new FakeOrderRepository();
-        // fake.getAll().then(all => {
-        //     all.forEach(async (order) => {
-        //         await this.save(order);
-        //     })
-        // })
+       
     }
 
     async getAll(): Promise<OrderBase[]> {

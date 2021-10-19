@@ -4,17 +4,30 @@ import { PrintOrderItem } from "@/entities/print/PrintOrderItem";
 import { UVOrder } from "@/entities/uv/UVOrder";
 import { UVOrderObjectItem } from "@/entities/uv/UVOrderObjectItem";
 import { UserProvider } from "@/providers/UserProvider";
-import { OrderRepository } from "@/repositories/OrderRepository";
+import { IOrderRepository } from "@/repositories/IOrderRepository";
+import { IOrderService } from "./IOrderService";
 
-export class OrderService {
-    private repo = new OrderRepository();
+export class OrderService implements IOrderService {
+    private repo: IOrderRepository;
     private userProvider = new UserProvider();
+
+    constructor(repo: IOrderRepository, userProvider: UserProvider) {
+        this.repo = repo;
+        this.userProvider = userProvider;
+
+         // const fake = new FakeOrderRepository();
+        // fake.getAll().then(all => {
+        //     all.forEach(async (order) => {
+        //         await this.save(order);
+        //     })
+        // })
+    }
 
     async getAll(): Promise<OrderBase[]> {
         return this.repo.getAll();
     }
 
-    async find(id: string): Promise<OrderBase | undefined> {
+    async find(id: number | string): Promise<OrderBase | undefined> {
         return this.repo.find(id);
     }
 

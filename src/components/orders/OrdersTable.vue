@@ -189,7 +189,6 @@
 
 <script lang="ts">
 import { OrderBase } from "@/entities/OrderBase";
-import { OrderService } from "@/services/OrderService";
 import { XlsxService } from "@/services/XlsxService";
 
 import { nextTick, defineComponent, inject, ref } from "vue";
@@ -200,12 +199,13 @@ import Menu from "primevue/menu";
 import { useConfirm } from "primevue/useconfirm";
 import { useRouter } from "vue-router";
 import { PrintOrder } from "@/entities/print/PrintOrder";
+import { IOrderService } from "@/services/IOrderService";
 
 export default defineComponent({
   name: "OrdersTable",
   setup(props, { emit }) {
     const xlsx = new XlsxService();
-    const orderService = inject("OrderService") as OrderService;
+    const orderService = inject("OrderService") as IOrderService;
     const orders = ref<OrderBase[]>([]);
     const selectedOrder = ref<OrderBase | undefined>();
     const isLoading = ref(false);

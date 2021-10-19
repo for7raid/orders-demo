@@ -128,7 +128,7 @@
 </template>
 
 <script lang="ts">
-import { OrderService } from "@/services/OrderService";
+import { IOrderService } from "@/services/IOrderService";
 import { defineComponent, inject, ref, toRefs, computed, nextTick } from "vue";
 import { UVOrderObjectItemStatus } from "@/entities/uv/UVOrderObjectItemStatus";
 import { UVOrder } from "@/entities/uv/UVOrder";
@@ -142,7 +142,7 @@ export default defineComponent({
     order: UVOrder,
   },
   setup(props) {
-    const orderService = inject("OrderService") as OrderService;
+    const orderService = inject("OrderService") as IOrderService;
     const selectedOrderItem = ref<UVOrderObjectItem | undefined>();
     const { order } = toRefs(props);
     const allItems = computed(() =>

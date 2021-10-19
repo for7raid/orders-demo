@@ -10,9 +10,12 @@ import { UVOrderObjectItem } from '@/entities/uv/UVOrderObjectItem';
 import { UVOrderObjectItemStatus } from '@/entities/uv/UVOrderObjectItemStatus';
 
 import { createId } from "@/utils/uuid";
+import { IOrderRepository } from "./IOrderRepository";
 
-export class FakeOrderRepository {
-    private FakeData: OrderBase[] = [];
+export class FakeOrderRepository implements IOrderRepository {
+    private FakeData: {
+        [index: number]: OrderBase;
+    } = {}
     private countUF = 5;
     private countPrint = 5;
 
@@ -26,7 +29,7 @@ export class FakeOrderRepository {
             order.clientAddress = 'Client Address ' + i;
             order.receiver = 'Client Receiver ' + i;
 
-            this.FakeData.push(order);
+            this.FakeData[order.id]= order;
 
             for (var j = 0; j < 5; j++) {
                 let object = new UVOrderObject(createId(), j);
@@ -65,13 +68,13 @@ export class FakeOrderRepository {
             order.clientAddress = 'Client Address ' + i;
             order.receiver = 'Client Receiver ' + i;
 
-            this.FakeData.push(order);
+            this.FakeData[order.id]= order;
 
 
 
             for (var k = 0; k < 5; k++) {
-                let item = new PrintOrderItem(createId(),k);
-                
+                let item = new PrintOrderItem(createId(), k);
+
                 item.index = k + 1;
                 item.name = `item ${k} order ${i}`;
                 item.count = k + 1;
@@ -122,9 +125,15 @@ export class FakeOrderRepository {
 
         }
     }
+    async find(id: number): Promise<OrderBase | undefined> {
+        return this.FakeData[id];
+    }
+    async save(order: OrderBase): Promise<void> {
+        this.FakeData[order.id]= order;
+    }
 
     async getAll() {
-        return this.FakeData;
+        return Object.values(this.FakeData);
     }
 
 }
