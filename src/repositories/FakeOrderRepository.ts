@@ -25,9 +25,9 @@ export class FakeOrderRepository implements IOrderRepository {
             let order = new UVOrder(new User(`user${i}`, `user name ${i}`));
             order.id = order.id + i;
             order.name = "order " + i;
-            order.client = 'Client ' + i;
-            order.clientAddress = 'Client Address ' + i;
-            order.receiver = 'Client Receiver ' + i;
+            order.client.name = 'Client ' + i;
+            order.client.address = 'Client Address ' + i;
+            order.receiver.name = 'Client Receiver ' + i;
 
             this.FakeData[order.id]= order;
 
@@ -64,9 +64,9 @@ export class FakeOrderRepository implements IOrderRepository {
             let order = new PrintOrder(new User(`user${i}`, `user name ${i}`));
             order.id = order.id + i;
             order.name = "print order " + i;
-            order.client = 'Client ' + i;
-            order.clientAddress = 'Client Address ' + i;
-            order.receiver = 'Client Receiver ' + i;
+            order.client.name = 'Client ' + i;
+            order.client.address = 'Client Address ' + i;
+            order.receiver.name = 'Client Receiver ' + i;
 
             this.FakeData[order.id]= order;
 

@@ -43,7 +43,7 @@
         </template>
       </Column>
 
-      <Column field="client" header="Клиент/Плательщик" style="flex: 15 15 15%">
+      <Column field="client.name" header="Клиент/Плательщик" style="flex: 15 15 15%">
         <template #filter="{ filterModel, filterCallback }">
           <InputText
             type="text"
@@ -57,8 +57,8 @@
 
       <Column field="receiver" header="Получатель" style="flex: 30 30 30%">
         <template #body="slotProps">
-          {{ slotProps.data.receiver }} {{ slotProps.data.receiverContacts }}
-          {{ slotProps.data.receiverAddress }}
+          {{ slotProps.data.receiver.name }} {{ slotProps.data.receiver.contacts }}
+          {{ slotProps.data.receiver.address }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -287,7 +287,7 @@ export default defineComponent({
         header: "Отмена заказа",
         icon: "pi pi-exclamation-triangle",
         accept: async () => {
-          await orderService.cancellOrder(selectedOrder.value!);
+          await orderService.cancelOrder(selectedOrder.value!);
         },
       });
     };

@@ -1,6 +1,7 @@
 ﻿import { createId } from "@/utils/uuid";
 import { Expose, Type } from "class-transformer";
 import { OrderBase } from "../OrderBase";
+import { User } from "../User";
 import { PrintOrderItem } from "./PrintOrderItem";
 
 export class PrintOrder extends OrderBase {
@@ -48,6 +49,28 @@ export class PrintOrder extends OrderBase {
 		const allIndexes = this.items.map(o => o.index);
 		const max = Math.max(0, ...allIndexes) + 1;
 		return this.items.push(new PrintOrderItem(createId(), max));
+	}
+
+	start(user: User) {
+		this.items.forEach(item => {
+			if (item.canStart) {
+				item.start(user);
+			}
+		})
+	}
+
+	dispatch(user: User) {
+		this.items.forEach(item => {
+			if (item.canDispatch) {
+				item.dispatch(user);
+			}
+		})
+	}
+
+	cancel(user: User) {
+		this.items.forEach(item => {
+			item.cancel(user);
+		})
 	}
 
 	validate() {

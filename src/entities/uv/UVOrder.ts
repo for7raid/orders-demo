@@ -1,6 +1,7 @@
 ﻿import { createId } from '@/utils/uuid';
 import { Expose, Type } from 'class-transformer';
 import { OrderBase } from '../OrderBase';
+import { User } from '../User';
 import { UVOrderObject } from './UVOrderObject';
 
 
@@ -60,6 +61,36 @@ export class UVOrder extends OrderBase {
 		const max = Math.max(0, ...allIndexes) + 1;
 		const newObj = new UVOrderObject(createId(), max);
 		return this.objects.push(newObj);
+	}
+
+	start(user: User) {
+		this.objects.forEach(object => {
+			object.items.forEach(item => {
+				if (item.canStart) {
+					item.start(user);
+				}
+			})
+		})
+	}
+
+	dispatch(user: User) {
+		this.objects.forEach(object => {
+			object.items.forEach(item => {
+				if (item.canDispatch) {
+					item.dispatch(user);
+				}
+			})
+		})
+
+	}
+
+	cancel(user: User) {
+		this.objects.forEach(object => {
+			object.items.forEach(item => {
+				item.cancel(user);
+			})
+		})
+
 	}
 
 	validate() {

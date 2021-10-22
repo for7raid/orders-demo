@@ -1,7 +1,5 @@
 import { OrderBase } from "@/entities/OrderBase";
-import { PrintOrder } from "@/entities/print/PrintOrder";
 import { PrintOrderItem } from "@/entities/print/PrintOrderItem";
-import { UVOrder } from "@/entities/uv/UVOrder";
 import { UVOrderObjectItem } from "@/entities/uv/UVOrderObjectItem";
 import { UserProvider } from "@/providers/UserProvider";
 import { IOrderRepository } from "@/repositories/IOrderRepository";
@@ -15,7 +13,7 @@ export class OrderService implements IOrderService {
         this.repo = repo;
         this.userProvider = userProvider;
 
-         // const fake = new FakeOrderRepository();
+        // const fake = new FakeOrderRepository();
         // fake.getAll().then(all => {
         //     all.forEach(async (order) => {
         //         await this.save(order);
@@ -37,68 +35,22 @@ export class OrderService implements IOrderService {
     }
 
     async startOrder(order: OrderBase) {
-        if (order instanceof UVOrder) {
-            order.objects.forEach(object => {
-                object.items.forEach(item => {
-                    if (item.canStart) {
-                        item.start(this.userProvider.currentUser);
-                    }
-                })
-            })
-        }
-        if (order instanceof PrintOrder) {
-            order.items.forEach(item => {
-                if (item.canStart) {
-                    item.start(this.userProvider.currentUser);
-                }
-            })
-        }
+        order.start(this.userProvider.currentUser);
         await this.save(order);
     }
 
     async dispatchOrder(order: OrderBase) {
-        if (order instanceof UVOrder) {
-            order.objects.forEach(object => {
-                object.items.forEach(item => {
-                    if (item.canDispatch) {
-                        item.dispatch(this.userProvider.currentUser);
-                    }
-                })
-            })
-        }
-        if (order instanceof PrintOrder) {
-            order.items.forEach(item => {
-                if (item.canDispatch) {
-                    item.dispatch(this.userProvider.currentUser);
-                }
-            })
-        }
+        order.dispatch(this.userProvider.currentUser);
         await this.save(order);
     }
 
-    async cancellOrder(order: OrderBase) {
-        if (order instanceof UVOrder) {
-            order.objects.forEach(object => {
-                object.items.forEach(item => {
-                    item.cancel(this.userProvider.currentUser);
-                })
-            })
-        }
-        if (order instanceof PrintOrder) {
-            order.items.forEach(item => {
-                item.cancel(this.userProvider.currentUser);
-            })
-        }
+    async cancelOrder(order: OrderBase) {
+        order.cancel(this.userProvider.currentUser);
         await this.save(order);
     }
 
     async startItem(order: OrderBase, item: any) {
-        if (item instanceof UVOrderObjectItem) {
-            item.start(this.userProvider.currentUser);
-        }
-        if (item instanceof PrintOrderItem) {
-            item.start(this.userProvider.currentUser);
-        }
+        item.start(this.userProvider.currentUser);
         await this.save(order);
     }
 

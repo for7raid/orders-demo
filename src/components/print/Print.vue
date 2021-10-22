@@ -9,13 +9,13 @@
     </div>
     <br />
     <div style="text-align: left">
-      Клиент: {{ order.client }}, {{ order.clientContacts }},
+      Клиент: {{ order.client.name }}, {{ order.client.contacts }},
       {{ order.clientAddress }}
       <br />
 
-      <span v-if="order.receiver || order.receiverAddress">
-        Получатель: {{ order.receiver }}, {{ order.receiverContacts }},
-        {{ order.receiverAddress }}
+      <span v-if="order.receiver.name || order.receiver.address">
+        Получатель: {{ order.receiver.name }}, {{ order.receiver.contacts }},
+        {{ order.receiver.address }}
         <br />
         <br />
       </span>

@@ -34,7 +34,7 @@
       <label for="client" class="col-12 mb-2 md:col-2 md:mb-0">Клиент</label>
       <div class="col-12 md:col-10">
         <Dadata
-          v-model="order.client"
+          v-model="order.client.name"
           mode="party"
           @item-select="companySelected('client', $event)"
         />
@@ -46,7 +46,7 @@
         >Адрес</label
       >
       <div class="col-12 md:col-10">
-        <Dadata v-model="order.clientAddress" mode="address" />
+        <Dadata v-model="order.client.address" mode="address" />
       </div>
     </div>
 
@@ -56,7 +56,7 @@
       >
       <div class="col-12 md:col-10">
         <InputText
-          v-model="order.clientContacts"
+          v-model="order.client.contacts"
           id="clientContacts"
           class="inputfield w-full"
         ></InputText>
@@ -71,7 +71,7 @@
       >
       <div class="col-12 md:col-10">
         <Dadata
-          v-model="order.receiver"
+          v-model="order.receiver.name"
           mode="party"
           @item-select="companySelected('receiver', $event)"
         />
@@ -83,7 +83,7 @@
         >Адрес</label
       >
       <div class="col-12 md:col-10">
-        <Dadata v-model="order.receiverAddress" mode="address" />
+        <Dadata v-model="order.receiver.address" mode="address" />
       </div>
     </div>
 
@@ -93,7 +93,7 @@
       >
       <div class="col-12 md:col-10">
         <InputText
-          v-model="order.receiverContacts"
+          v-model="order.receiver.contacts"
           id="receiverContacts"
           class="inputfield w-full"
         ></InputText>
@@ -137,7 +137,7 @@ export default defineComponent({
     const { order } = toRefs(props);
     const companySelected = (mode: string, event: any) => {
       const address = event.value.data.address.value;
-      (order.value as any)[mode + "Address"] = address;
+      (order.value as any)[mode]["address"] = address;
     };
 
     return {

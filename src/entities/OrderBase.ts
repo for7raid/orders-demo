@@ -1,4 +1,5 @@
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose, Type } from "class-transformer";
+import { Client } from "./Client";
 import { User } from "./User";
 
 export class OrderBase {
@@ -15,19 +16,29 @@ export class OrderBase {
 
     name: string | undefined;
 
-    client: string | undefined;
-    clientAddress: string | undefined;
-    clientContacts: string | undefined;
+    @Type(() => Client)
+    client: Client = new Client();
 
-    receiver: string | undefined;
-    receiverAddress: string | undefined;
-    receiverContacts: string | undefined;
+    @Type(() => Client)
+    receiver: Client = new Client();
 
     description: string | undefined;
 
     constructor(user: User) {
         this.id = this.date = this.changeDate = (new Date()).getTime();
         this.user = user;
+    }
+
+    start(user: User) {
+        throw new Error("not implemented");
+    }
+
+    dispatch(user: User) {
+        throw new Error("not implemented");
+    }
+
+    cancel(user: User) {
+        throw new Error("not implemented");
     }
 
     validate(): { isValid: boolean, message: string } {

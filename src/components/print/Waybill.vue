@@ -36,9 +36,9 @@
     Получатель:
     <br />
     <textarea class="header" rows="3"
-      >{{ order.receiver || order.client }}, {{
-        order.receiverContacts || order.clientContacts
-      }}, {{ order.receiverAddress || order.clientAddress }}</textarea
+      >{{ order.receiver.name || order.client.name }}, {{
+        order.receiver.contacts || order.client.contacts
+      }}, {{ order.receiver.address || order.client.address }}</textarea
     >
     <br />
 

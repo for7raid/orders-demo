@@ -6,7 +6,7 @@ export interface IOrderService {
     save(order: OrderBase): void
     startOrder(order: OrderBase): void
     dispatchOrder(order: OrderBase): void
-    cancellOrder(order: OrderBase): void
+    cancelOrder(order: OrderBase): void
     startItem(order: OrderBase, item: any): void
     finishItem(order: OrderBase, item: any): void
     dispatchItem(order: OrderBase, item: any): void

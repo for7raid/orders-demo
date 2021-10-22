@@ -3,7 +3,7 @@
 <template>
   <span class="p-fluid"
     ><AutoComplete
-      v-model="modelValue"
+      v-model="value"
       :suggestions="filteredItems"
       field="value"
       @complete="search"
@@ -25,7 +25,7 @@
   >
 </template>
 <script lang="ts">
-import { defineComponent, ref, toRefs } from "vue";
+import { defineComponent, ref, toRefs, watch } from "vue";
 export default defineComponent({
   name: "Dadata",
   props: {
@@ -37,6 +37,12 @@ export default defineComponent({
     const filteredItems = ref<String[]>([]);
     const { modelValue } = toRefs(props);
     const mode = props.mode;
+
+    const value = ref(modelValue.value);
+
+    watch(modelValue, (newVal) => {
+      value.value = newVal;
+    });
 
     const search = async (event: any) => {
       const res = await getDadata(event.query);
@@ -77,7 +83,14 @@ export default defineComponent({
 
     const clear = () => emit("update:modelValue", "");
 
-    return { modelValue, mode, filteredItems, search, itemSelect, clear };
+    return {
+      value,
+      mode,
+      filteredItems,
+      search,
+      itemSelect,
+      clear
+    };
   },
 });
 </script>
