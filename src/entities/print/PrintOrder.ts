@@ -1,5 +1,6 @@
 ﻿import { createId } from "@/utils/uuid";
 import { Expose, Type } from "class-transformer";
+import { IValidationError } from "../IValidationError";
 import { OrderBase } from "../OrderBase";
 import { User } from "../User";
 import { PrintOrderItem } from "./PrintOrderItem";
@@ -45,10 +46,12 @@ export class PrintOrder extends OrderBase {
 		return total;
 	}
 
-	createItem() {
+	createItem(user: User) {
 		const allIndexes = this.items.map(o => o.index);
 		const max = Math.max(0, ...allIndexes) + 1;
-		return this.items.push(new PrintOrderItem(createId(), max));
+		const item = new PrintOrderItem(createId(), max);
+		item.added(user);
+		return this.items.push(item);
 	}
 
 	start(user: User) {
@@ -73,30 +76,31 @@ export class PrintOrder extends OrderBase {
 		})
 	}
 
-	validate() {
-		const errors = [];
+	validate(): IValidationError {
+		const errors: IValidationError[] = [];
 		if (!this.name || !this.name.toString().trim().length) {
-			errors.push('Укажите имя заказа');
+			errors.push({ name: 'Укажите имя заказа' });
 		}
 
 		if (!this.client || !this.client.toString().trim().length) {
-			errors.push('Укажите клиента заказа');
+			errors.push({ name: 'Укажите клиента заказа' });
 		}
 
 		if (!this.items || !this.items.length) {
-			errors.push('Добавьте макеты');
+			errors.push({ name: 'Добавьте макеты' });
 		}
 
 		this.items.forEach(item => {
 			let state = item.validate();
 			if (!state.isValid) {
-				errors.push(`<br/>- ${item.index} ${item.name || '[Без названия]'}<br/>` + state.message);
+				errors.push(state);
 			}
 		});
 
 		return {
+			name: `${this.name || '[Без имени]'}`,
 			isValid: !errors.length,
-			message: errors.join('<br/>')
+			errors
 		}
 	}
 }

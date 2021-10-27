@@ -1,5 +1,6 @@
 ﻿import { createId } from "@/utils/uuid";
 import { Expose, plainToClass, Type } from "class-transformer";
+import { IValidationError } from "../IValidationError";
 import { User } from "../User";
 import { UVOrderObjectItem } from "./UVOrderObjectItem";
 
@@ -50,26 +51,28 @@ export class UVOrderObject {
 		return this.items.push(newRow);
 	}
 
-	validate() {
-		const errors = [];
+	validate(): IValidationError {
+		const errors: IValidationError[] = [];
 		if (!this.name || !this.name.toString().trim().length) {
-			errors.push('-Укажите имя объекта');
+			errors.push({name:'Укажите имя объекта'});
 		}
 
 		if (!this.items || !this.items.length) {
-			errors.push('-Добавьте макеты');
+			errors.push({name: 'Добавьте макеты'});
 		}
 
 		this.items.forEach(item => {
 			let state = item.validate();
 			if (!state.isValid) {
-				errors.push(`<br/>-- ${this.index}.${item.index.toString().padStart(2, '0')} ${item.name || '[Без названия]'}<br/>` + state.message);
+				//errors.push(`<br/>-- ${this.index}.${item.index.toString().padStart(2, '0')} ${item.name || '[Без названия]'}<br/>` + state.message);
+				errors.push(state);
 			}
 		});
 
 		return {
+			name: `${this.index}. ${this.name || '[Без названия]'}`,
 			isValid: !errors.length,
-			message: errors.join('<br/>')
+			errors
 		}
 	}
 }

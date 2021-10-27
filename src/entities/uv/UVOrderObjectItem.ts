@@ -1,12 +1,13 @@
 ﻿import { User } from '@/entities/User';
 import { IUFOrderObjectItemHistoryItem } from '@/entities/uv/IUFOrderObjectItemHistoryItem';
 import { Exclude, Expose } from 'class-transformer';
+import { IValidationError } from '../IValidationError';
 import { UVOrderObject } from './UVOrderObject';
 
 export class UVOrderObjectItem {
 	static Materials = ['ПВХ 1 мм', 'ПВХ 3 мм', 'ПВХ 5 мм', 'Картон', 'Картон+пленка', 'ПЭТ 0,5 мм', 'ПЭТ 0,7мм', 'ПЭТ 1 мм', 'Баннер', 'Пленка с ламинацией'];
 	static Sides = ['4+0', '4+4'];
-	
+
 	id;
 	index = 1;
 
@@ -43,7 +44,7 @@ export class UVOrderObjectItem {
 
 	status: number;
 	history: IUFOrderObjectItemHistoryItem[] = [];
-  
+
 	@Exclude()
 	object: UVOrderObject | undefined;
 
@@ -157,22 +158,23 @@ export class UVOrderObjectItem {
 		this.status = status;
 	}
 
-	validate() {
-		const errors = [];
+	validate(): IValidationError {
+		const errors: IValidationError[] = [];
 		if (!this.name || !this.name.toString().trim().length) {
-			errors.push('--- Укажите имя макета.');
+			errors.push({ name: 'Укажите имя макета.' });
 		}
 		if (!this.count || this.count <= 0) {
-			errors.push('--- Не указано количество изделий.')
+			errors.push({ name: 'Не указано количество изделий.' })
 		}
 
 		if (!this.square || this.square <= 0) {
-			errors.push('--- Неверная площадь изделия. Проверьте размеры.')
+			errors.push({ name: 'Неверная площадь изделия. Проверьте размеры.' })
 		}
 
 		return {
+			name: `${this.index}. ${this.name || '[Без названия]'}`,
 			isValid: !errors.length,
-			message: errors.join('<br/>')
+			errors
 		}
 	}
 

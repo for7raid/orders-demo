@@ -64,6 +64,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import UVOrderEdit from "@/components/uv/Edit.vue";
 import PrintOrderEdit from "@/components/print/Edit.vue";
+import { IValidationError } from "@/entities/IValidationError";
 
 export default defineComponent({
   components: { UVOrderEdit, PrintOrderEdit },
@@ -105,10 +106,25 @@ export default defineComponent({
       const state = order.value!.validate();
 
       if (!state.isValid) {
+        const getMessage = (state: IValidationError, level = 0): string => {
+          return (
+            "".padStart(level * 2, "--") +
+            state.name +
+            (state.errors?.reduce(
+              (messages: string, value: IValidationError) => {
+                return messages + "<br/>" + getMessage(value, level + 1);
+              },
+              ""
+            ) || "")
+          );
+        };
+
+        const message = getMessage(state, 0);
+
         toast.add({
           severity: "error",
           summary: "В заказе есть ошибки",
-          detail: state.message,
+          detail: message,
         });
         return;
       }

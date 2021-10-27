@@ -146,7 +146,7 @@ export default defineComponent({
     };
 
     const addItem = () => {
-      order.value.createItem();
+      order.value.createItem(userProvider.currentUser);
     };
 
     return {

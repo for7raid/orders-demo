@@ -18,6 +18,16 @@
 		return this.left || this.right || this.top || this.bottom;
 	}
 
+	getCost(height: number, width: number): number {
+		let length = 0;
+		if (this.left) length += height;
+		if (this.right) length += height;
+		if (this.top) length += width;
+		if (this.bottom) length += width;
+		return length * this.price;
+
+	}
+
 	toString() {
 		if (!this.has) return '';
 		if (this.all) return 'Все';

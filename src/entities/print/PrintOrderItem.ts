@@ -1,13 +1,24 @@
-﻿import { Expose } from "class-transformer";
+﻿import { Expose, Type } from "class-transformer";
+import { Attachment } from "../Attachment";
+import { IValidationError } from "../IValidationError";
 import { User } from "../User";
 import { PrintOrderItemPostProcessing } from "./PrintOrderItemPostProcessing";
 
 export class PrintOrderItem {
+
+	static MaterialTypes = ["Акрил", "Пленка"];
+	static MaterialSubTypes = ["-", "Ламинированный", "Литой"];
+	static MaterialProperties = ["-", "Ламинированный", "Литой"];
+	static Densities = [280, 300];
+	static Resolutions = [0, 3];
+	static Wrappings = ["Рулон", "Конерт", "Туба"];
+	static PriceTypes = [{ name: "кв. метр", value: 1 }, { name: "штуку", value: 2 }]
+
 	id: string;
 	index = 1;
 
 	name!: string;
-	//fileName;
+	fileName!: string;
 	content!: string;
 	description!: string;
 	materialType!: string;
@@ -15,19 +26,27 @@ export class PrintOrderItem {
 	materialProperties!: string;
 	color!: string;
 	density!: number;
-	thinkness!: number;
-	height!: number;
-	width!: number;
+	height: number = 0;
+	width: number = 0;
 	wrapping!: string;
 	resolution!: number;
 	doubleSquare = false;
 	priceType = 1;
-	price!: number;
-	count!: number;
+	price: number = 0;
+	count: number = 0;
+	@Type(() => Attachment)
+	preview!: Attachment;
 
+	@Type(() => PrintOrderItemPostProcessing)
 	holes!: PrintOrderItemPostProcessing;
+	@Type(() => PrintOrderItemPostProcessing)
+
 	pocket!: PrintOrderItemPostProcessing;
+	@Type(() => PrintOrderItemPostProcessing)
+
 	strengthening!: PrintOrderItemPostProcessing;
+	@Type(() => PrintOrderItemPostProcessing)
+
 	welding!: PrintOrderItemPostProcessing;
 
 	status = -1;
@@ -45,15 +64,29 @@ export class PrintOrderItem {
 		this.pocket = new PrintOrderItemPostProcessing();
 		this.strengthening = new PrintOrderItemPostProcessing();
 		this.welding = new PrintOrderItemPostProcessing();
+		this.preview = new Attachment();
 	}
 	@Expose()
 	get square() {
 		return (this.height * this.width) * (this.doubleSquare ? 2 : 1);
 	}
 	@Expose()
+	get perimeter() {
+		return (this.height + this.width) * 2;
+	}
+	@Expose()
 	get total() {
-		return Math.floor(
-			0);
+
+		let total = this.price * (this.priceType == 1 ? this.square : 1);
+
+		total = total + this.holes.getCost(this.height, this.width)
+		total = total + this.pocket.getCost(this.height, this.width)
+		total = total + this.strengthening.getCost(this.height, this.width)
+		total = total + this.welding.getCost(this.height, this.width)
+
+		total = total * this.count;
+
+		return Math.floor(total);
 	}
 
 	get isCanceled() {
@@ -139,27 +172,30 @@ export class PrintOrderItem {
 		this.status = status;
 	}
 
-	validate() {
-		const errors = [];
+	validate(): IValidationError {
+		const errors: IValidationError[] = [];
 		if (!this.name || this.name.toString().trim().length < 4) {
-			errors.push('- Укажите имя макета');
+			errors.push({ name: 'Укажите имя макета' });
 		}
 
-		if (!this.content || this.content.toString().trim().length < 4) {
-			errors.push('- Укажите содержание макета');
-		}
-
-		// if (!this.fileName || !this.fileName.toString().trim().length) {
-		// 	errors.push('- Загрузите превью макета');
+		// if (!this.content || this.content.toString().trim().length < 4) {
+		// 	errors.push({ name: 'Укажите содержание макета' });
 		// }
 
+		if (!this.preview || !this.preview.has) {
+			errors.push({ name: 'Загрузите превью макета' });
+		}
+
 		if (!this.total || this.total <= 0) {
-			errors.push('- Стоимость макета неверная. Проверьте размеры, количество, цену.')
+			errors.push({ name: 'Стоимость макета неверная. Проверьте размеры, количество, цену.' })
+		} else if (!this.price || this.price <= 0) {
+			errors.push({ name: 'Укажите цену печати.' })
 		}
 
 		return {
+			name: `${this.index}. ${this.name || '[Без названия]'}`,
 			isValid: !errors.length,
-			message: errors.join('<br/>')
+			errors
 		}
 	}
 }

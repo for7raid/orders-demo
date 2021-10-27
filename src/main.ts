@@ -113,11 +113,13 @@ import { OrderService } from "./services/OrderService";
 import { OrderRepository } from "./repositories/OrderRepository";
 import { UserProvider } from "./providers/UserProvider";
 import { FakeOrderRepository } from "./repositories/FakeOrderRepository";
+import { AttachmentRepository } from "./repositories/AttachmentRepository";
 
 const orderRepo = new OrderRepository();
 //const orderRepo = new FakeOrderRepository();
+const attachments = new AttachmentRepository();
 const userProvider = new UserProvider();
-const orderService = new OrderService(orderRepo, userProvider);
+const orderService = new OrderService(orderRepo, attachments, userProvider);
 
 const app = createApp(App);
 

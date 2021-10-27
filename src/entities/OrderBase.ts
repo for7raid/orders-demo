@@ -1,5 +1,6 @@
 import { Exclude, Expose, Type } from "class-transformer";
 import { Client } from "./Client";
+import { IValidationError } from "./IValidationError";
 import { User } from "./User";
 
 export class OrderBase {
@@ -41,7 +42,7 @@ export class OrderBase {
         throw new Error("not implemented");
     }
 
-    validate(): { isValid: boolean, message: string } {
+    validate(): IValidationError {
         throw new Error("not implemented");
     }
 }
